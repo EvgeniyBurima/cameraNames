@@ -5,15 +5,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Camera Names</title>
+    <style>
+        body {
+            background-color: antiquewhite;
+        }
+        .wrapper {
+            padding: 8px;
+        }
+        ul {
+            padding: 8px;
+            border-top: 2px solid darkgrey;
+            border-bottom: 2px solid darkgrey;
+        }
+        li {
+            list-style-type: none;
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>results:</h2>
-    <ul></ul>
+    <div class="wrapper">
+        <h2>Cameras:</h2>
+        <div id="list-container"></div>
+    </div>
 
     <script>
-        const list = document.querySelector('ul');
+        const container = document.getElementById('list-container');
         /**
          * all available cameras
          */
@@ -110,10 +129,24 @@
             }
         };
 
-        const addPre = (camera) => {
-            const li = document.createElement('li')
-            li.textContent = camera.label;
-            list.appendChild(li);
+        const createLi = (name, val) => {
+            const li = document.createElement('li');
+            const b = document.createElement('b');
+            b.textContent = `${name}: `
+            const span = document.createElement('span');
+            span.textContent = val;
+            li.append(b, span);
+            return li
+        };
+
+        const addPre = ({ cameraType, label }) => {
+            const typeLi = createLi('type', cameraType);
+            const labelLi = createLi('label', label);
+            const list = document.createElement('ul');
+            list.append(typeLi, labelLi);
+            container.append(list);
+            
+            
         }
 
         const selectCamera = async () => {
