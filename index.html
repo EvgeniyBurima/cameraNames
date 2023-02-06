@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>results:</h2>
+    <ul></ul>
+
+    <script>
+        const list = document.querySelector('ul');
+        /**
+         * all available cameras
+         */
+        const cameraObjects = [];
+
+        const stopTrack = (mediaStream) => {
+            mediaStream.getTracks().forEach((track) => {
+                track.stop();
+                mediaStream.removeTrack(track);
+            });
+        };
+
+        const backCameraKeywords = [
+            'rear',
+            'back',
+            'rück',
+            'arrière',
+            'trasera',
+            'trás',
+            'traseira',
+            'posteriore',
+            '后面',
+            '後面',
+            '背面',
+            '后置',
+            '後置',
+            '背置',
+            'задней',
+            'الخلفية',
+            '후',
+            'arka',
+            'achterzijde',
+            'หลัง',
+            'baksidan',
+            'bagside',
+            'sau',
+            'bak',
+            'tylny',
+            'takakamera',
+            'belakang',
+            'אחורית',
+            'πίσω',
+            'spate',
+            'hátsó',
+            'zadní',
+            'darrere',
+            'zadná',
+            'задня',
+            'stražnja',
+            'belakang',
+            'बैक',
+        ];
+
+        const isBackCameraLabel = (cameraLabel) => {
+            const lowerCameraLabel = cameraLabel.toLowerCase();
+            return backCameraKeywords.some(
+                (backCameraKeyword) => lowerCameraLabel.includes(backCameraKeyword),
+            );
+        };
+
+        const fillVideoDevices = async () => {
+            try {
+                let devices = await navigator.mediaDevices.enumerateDevices();
+                // if permission is not given, label of video devices will be empty string
+                const isPermissionNotGranted = devices
+                    .filter(({ kind }) => kind.toLowerCase().startsWith('video')) // filter only video devices
+                    .every(({ label }) => label === '');
+                if (isPermissionNotGranted) {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: false,
+                    });
+                    // enumerate devices again - now the label field should be non-empty,
+                    // as we have a stream active (even if we didn't get persistent permission for camera)
+                    devices = await navigator.mediaDevices.enumerateDevices();
+                    stopTrack(stream);
+                }
+
+                devices
+                    .filter(({ kind }) => kind.toLowerCase().startsWith('video'))
+                    .forEach((videoDevice) => {
+                        const label = videoDevice.label || '';
+                        // eslint-disable-next-line no-param-reassign
+                        videoDevice.cameraType = isBackCameraLabel(label)
+                            ? 'environment'
+                            : 'user';
+                        if (label) {
+                            cameraObjects.push(videoDevice);
+                        }
+                    });
+                return cameraObjects;
+            } catch (error) {
+                return errorHandler(error);
+            }
+        };
+
+        const addPre = (camera) => {
+            const li = document.createElement('li')
+            li.textContent = camera.label;
+            list.appendChild(li);
+        }
+
+        const selectCamera = async () => {
+            if (!cameraObjects.length) {
+                await fillVideoDevices();
+            }
+            if (!cameraObjects.length) {
+                return false;
+            }
+
+            cameraObjects.forEach(addPre)
+        };
+
+        selectCamera();
+    </script>
+</body>
+
+</html>
