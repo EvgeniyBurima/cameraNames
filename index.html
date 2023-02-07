@@ -78,6 +78,7 @@
                 if (isPermissionNotGranted) {
                     const facingModes = ['user', 'environment'];
                     devices = (await Promise.all(facingModes.map(getCameras))).flat();
+                    console.log(devices);
                 }
 
                 devices
@@ -89,7 +90,7 @@
                         }
                     });
             } catch (error) {
-                return errorHandler(error);
+                alert(error.message);
             }
         };
 
