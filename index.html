@@ -45,52 +45,16 @@
             });
         };
 
-        const backCameraKeywords = [
-            'rear',
-            'back',
-            'rück',
-            'arrière',
-            'trasera',
-            'trás',
-            'traseira',
-            'posteriore',
-            '后面',
-            '後面',
-            '背面',
-            '后置',
-            '後置',
-            '背置',
-            'задней',
-            'الخلفية',
-            '후',
-            'arka',
-            'achterzijde',
-            'หลัง',
-            'baksidan',
-            'bagside',
-            'sau',
-            'bak',
-            'tylny',
-            'takakamera',
-            'belakang',
-            'אחורית',
-            'πίσω',
-            'spate',
-            'hátsó',
-            'zadní',
-            'darrere',
-            'zadná',
-            'задня',
-            'stražnja',
-            'belakang',
-            'बैक',
-        ];
-
-        const isBackCameraLabel = (cameraLabel) => {
-            const lowerCameraLabel = cameraLabel.toLowerCase();
-            return backCameraKeywords.some(
-                (backCameraKeyword) => lowerCameraLabel.includes(backCameraKeyword),
-            );
+        const getCameras = async (facingMode) => {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: facingMode },
+                audio: false,
+            });
+            // enumerate devices again - now the label field should be non-empty,
+            // as we have a stream active (even if we didn't get persistent permission for camera)
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            stopTrack(stream);
+            return devices.map((device) => ({ ...device, cameraType: facingMode }));
         };
 
         const fillVideoDevices = async () => {
@@ -101,29 +65,18 @@
                     .filter(({ kind }) => kind.toLowerCase().startsWith('video')) // filter only video devices
                     .every(({ label }) => label === '');
                 if (isPermissionNotGranted) {
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        video: true,
-                        audio: false,
-                    });
-                    // enumerate devices again - now the label field should be non-empty,
-                    // as we have a stream active (even if we didn't get persistent permission for camera)
-                    devices = await navigator.mediaDevices.enumerateDevices();
-                    stopTrack(stream);
+                    const facingModes = ['user', 'environment'];
+                    devices = (await Promise.all(facingModes.map(getCameras))).flat();
                 }
 
                 devices
                     .filter(({ kind }) => kind.toLowerCase().startsWith('video'))
                     .forEach((videoDevice) => {
                         const label = videoDevice.label || '';
-                        // eslint-disable-next-line no-param-reassign
-                        videoDevice.cameraType = isBackCameraLabel(label)
-                            ? 'environment'
-                            : 'user';
                         if (label) {
                             cameraObjects.push(videoDevice);
                         }
                     });
-                return cameraObjects;
             } catch (error) {
                 return errorHandler(error);
             }
