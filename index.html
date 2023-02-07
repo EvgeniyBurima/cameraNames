@@ -48,124 +48,185 @@
          * all available cameras
          */
         const cameraObjects = [];
-
+      
         const stopTrack = (mediaStream) => {
-            mediaStream.getTracks().forEach((track) => {
-                track.stop();
-                mediaStream.removeTrack(track);
-            });
+          mediaStream.getTracks().forEach((track) => {
+            track.stop();
+            mediaStream.removeTrack(track);
+          });
         };
-
-        const getCameras = async (facingMode) => {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: facingMode },
-                audio: false,
-            });
-            // enumerate devices again - now the label field should be non-empty,
-            // as we have a stream active (even if we didn't get persistent permission for camera)
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            stopTrack(stream);
-            return devices.map((device) => ({ ...device, cameraType: facingMode }));
+      
+        const backCameraKeywords = [
+          'desk',
+          'rear',
+          'back',
+          'rück',
+          'arrière',
+          'trasera',
+          'trás',
+          'traseira',
+          'posteriore',
+          '后面',
+          '後面',
+          '背面',
+          '后置',
+          '後置',
+          '背置',
+          'задней',
+          'الخلفية',
+          '후',
+          'arka',
+          'achterzijde',
+          'หลัง',
+          'baksidan',
+          'bagside',
+          'sau',
+          'bak',
+          'tylny',
+          'takakamera',
+          'belakang',
+          'אחורית',
+          'πίσω',
+          'spate',
+          'hátsó',
+          'zadní',
+          'darrere',
+          'zadná',
+          'задня',
+          'stražnja',
+          'belakang',
+          'बैक',
+        ];
+      
+        const isBackCameraLabel = (cameraLabel) => {
+          const lowerCameraLabel = cameraLabel.toLowerCase();
+          return backCameraKeywords.some(
+            (backCameraKeyword) => lowerCameraLabel.includes(backCameraKeyword),
+          );
         };
-
+      
+        const getDevices = async (facingMode) => {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: facingMode } },
+            audio: false,
+          });
+          // enumerate devices again - now the label field should be non-empty,
+          // as we have a stream active (even if we didn't get persistent permission for camera)
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          console.log({ devices })
+          stopTrack(stream);
+          devices.forEach(device => { device.cameraType = facingMode; });
+      
+          return devices;
+        };
+      
         const fillVideoDevices = async () => {
-            try {
-                let devices = await navigator.mediaDevices.enumerateDevices();
-                // if permission is not given, label of video devices will be empty string
-                const isPermissionNotGranted = devices
-                    .filter(({ kind }) => kind.toLowerCase().startsWith('video')) // filter only video devices
-                    .every(({ label }) => label === '');
-                if (isPermissionNotGranted) {
-                    const facingModes = ['user', 'environment'];
-                    devices = (await Promise.all(facingModes.map(getCameras))).flat();
-                    console.log(devices);
-                }
-
-                devices
-                    .filter(({ kind }) => kind.toLowerCase().startsWith('video'))
-                    .forEach((videoDevice) => {
-                        const label = videoDevice.label || '';
-                        if (label) {
-                            cameraObjects.push(videoDevice);
-                        }
-                    });
-            } catch (error) {
-                alert(error.message);
+          try {
+            let devices = await navigator.mediaDevices.enumerateDevices();
+            // if permission is not given, label of video devices will be empty string
+            const isPermissionNotGranted = devices
+              .filter(({ kind }) => kind.toLowerCase().startsWith('video')) // filter only video devices
+              .every(({ label }) => label === '');
+            if (isPermissionNotGranted) {
+              const stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false,
+              });
+              // enumerate devices again - now the label field should be non-empty,
+              // as we have a stream active (even if we didn't get persistent permission for camera)
+              devices = await navigator.mediaDevices.enumerateDevices();
+              stopTrack(stream);
             }
+      
+            devices
+              .filter(({ kind }) => kind.toLowerCase().startsWith('video')) // filter only video devices
+              .forEach((videoDevice) => {
+                const label = videoDevice.label || '';
+                // eslint-disable-next-line no-param-reassign
+                videoDevice.cameraType = isBackCameraLabel(label)
+                  ? 'environment'
+                  : 'user';
+                  if (label) {
+                    cameraObjects.push(videoDevice);
+                  }
+              });
+          } catch (error) {
+            alert(error.message);
+          }
         };
-
+      
         const createLi = (name, val) => {
-            const li = document.createElement('li');
-            const b = document.createElement('b');
-            b.textContent = `${name}: `
-            const span = document.createElement('span');
-            span.textContent = val;
-            li.append(b, span);
-            return li
+          const li = document.createElement('li');
+          const b = document.createElement('b');
+          b.textContent = `${name}: `
+          const span = document.createElement('span');
+          span.textContent = val;
+          li.append(b, span);
+          return li
         };
-
+      
         const createLis = (cameraType, label) => {
-            const typeLi = createLi('type', cameraType);
-            const labelLi = createLi('label', label);
-            return { typeLi, labelLi };
+          const typeLi = createLi('type', cameraType);
+          const labelLi = createLi('label', label);
+          return { typeLi, labelLi };
         }
-
+      
         const addPre = ({ cameraType, label }) => {
-            const {typeLi, labelLi} = createLis(cameraType, label);
-            const list = document.createElement('ul');
-            list.append(typeLi, labelLi);
-            container.append(list);
+          const {typeLi, labelLi} = createLis(cameraType, label);
+          const list = document.createElement('ul');
+          list.append(typeLi, labelLi);
+          container.append(list);
         }
-
+      
         const selectCamera = async (cameraType) => {
-            if (!cameraObjects.length) {
-                await fillVideoDevices();
-
-                cameraObjects.forEach(addPre)
-            }
-            if (!cameraObjects.length) {
-                return false;
-            }
-
-            let cameraPool = cameraObjects
-                .filter(({ cameraType: type }) => type === cameraType)
-            if (!cameraPool.length) {
-                cameraPool = cameraObjects;
-            }
-
-            // sort camera pool by label
-            cameraPool = cameraPool
-                .sort((camera1, camera2) => camera1.label.localeCompare(camera2.label));
-
-            // Check if cameras are labeled with resolution information,
-            // take the higher-resolution one in that case
-            // Otherwise pick the first camera
-            let selectedCameraIndex = 0;
-            const cameraResolutions = cameraPool.map(({ label }) => {
-                const match = label.match(/\b([0-9]+)MP?\b/i);
-                return match !== null ? parseInt(match[1], 10) : NaN;
-            });
-
-            if (!cameraResolutions.some(Number.isNaN)) {
-                selectedCameraIndex = cameraResolutions.lastIndexOf(Math.max(...cameraResolutions));
-            }
-
-            return cameraPool[selectedCameraIndex];
+          if (!cameraObjects.length) {
+            await fillVideoDevices();
+      
+            cameraObjects.forEach(addPre)
+          }
+          if (!cameraObjects.length) {
+            return false;
+          }
+      
+          let cameraPool = cameraObjects
+            .filter(({ cameraType: type }) => type === cameraType)
+          if (!cameraPool.length) {
+            cameraPool = cameraObjects;
+          }
+      
+          // sort camera pool by label
+          cameraPool = cameraPool
+            .sort((camera1, camera2) => camera1.label.localeCompare(camera2.label));
+      
+          // Check if cameras are labeled with resolution information,
+          // take the higher-resolution one in that case
+          // Otherwise pick the first camera
+          let selectedCameraIndex = 0;
+          const cameraResolutions = cameraPool.map(({ label }) => {
+            const match = label.match(/\b([0-9]+)MP?\b/i);
+            return match !== null ? parseInt(match[1], 10) : NaN;
+          });
+      
+          if (!cameraResolutions.some(Number.isNaN)) {
+            selectedCameraIndex = cameraResolutions.lastIndexOf(Math.max(...cameraResolutions));
+          }
+      
+          return cameraPool[selectedCameraIndex];
         };
-
+      
         const startCamera = (cameraType) => {
-            selectCamera('user')
-                .then((camera) => {
-                    const {typeLi, labelLi} = createLis(camera.cameraType, camera.label);
-                    frontCameraContainer.append(typeLi, labelLi);
-                    return selectCamera('environment');
-                })
-                .then((camera) => {
-                    const {typeLi, labelLi} = createLis(camera.cameraType, camera.label);
-                    backCameraContainer.append(typeLi, labelLi);
-                });
+          selectCamera('user')
+            .then((camera) => {
+              const {typeLi, labelLi} = createLis(camera.cameraType, camera.label);
+              frontCameraContainer.append(typeLi, labelLi);
+              return selectCamera('environment');
+            })
+            .then((camera) => {
+              const {typeLi, labelLi} = createLis(camera.cameraType, camera.label);
+              backCameraContainer.append(typeLi, labelLi);
+            });
         }
-
+      
         startCamera();
     </script>
 </body>
