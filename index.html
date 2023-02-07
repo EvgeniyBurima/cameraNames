@@ -13,7 +13,10 @@
         .wrapper {
             padding: 8px;
         }
-        ul {
+        h2 {
+            font-size: 1.2rem;
+        }
+        ul {            
             padding: 8px;
             border-top: 2px solid darkgrey;
             border-bottom: 2px solid darkgrey;
@@ -29,10 +32,18 @@
     <div class="wrapper">
         <h2>Cameras:</h2>
         <div id="list-container"></div>
+        <div id="selected-camera-container">
+            <h2>Seleceted back Camera:</h2>
+            <ul id="back"></ul>
+            <h2>Seleceted front Camera:</h2>
+            <ul id="front"></ul>
+        </div>
     </div>
 
     <script>
         const container = document.getElementById('list-container');
+        const frontCameraContainer = document.getElementById('front');
+        const backCameraContainer = document.getElementById('back');
         /**
          * all available cameras
          */
@@ -92,28 +103,69 @@
             return li
         };
 
-        const addPre = ({ cameraType, label }) => {
+        const createLis = (cameraType, label) => {
             const typeLi = createLi('type', cameraType);
             const labelLi = createLi('label', label);
+            return { typeLi, labelLi };
+        }
+
+        const addPre = ({ cameraType, label }) => {
+            const {typeLi, labelLi} = createLis(cameraType, label);
             const list = document.createElement('ul');
             list.append(typeLi, labelLi);
             container.append(list);
-            
-            
         }
 
-        const selectCamera = async () => {
+        const selectCamera = async (cameraType) => {
             if (!cameraObjects.length) {
                 await fillVideoDevices();
+
+                cameraObjects.forEach(addPre)
             }
             if (!cameraObjects.length) {
                 return false;
             }
 
-            cameraObjects.forEach(addPre)
+            let cameraPool = cameraObjects
+                .filter(({ cameraType: type }) => type === cameraType)
+            if (!cameraPool.length) {
+                cameraPool = cameraObjects;
+            }
+
+            // sort camera pool by label
+            cameraPool = cameraPool
+                .sort((camera1, camera2) => camera1.label.localeCompare(camera2.label));
+
+            // Check if cameras are labeled with resolution information,
+            // take the higher-resolution one in that case
+            // Otherwise pick the first camera
+            let selectedCameraIndex = 0;
+            const cameraResolutions = cameraPool.map(({ label }) => {
+                const match = label.match(/\b([0-9]+)MP?\b/i);
+                return match !== null ? parseInt(match[1], 10) : NaN;
+            });
+
+            if (!cameraResolutions.some(Number.isNaN)) {
+                selectedCameraIndex = cameraResolutions.lastIndexOf(Math.max(...cameraResolutions));
+            }
+
+            return cameraPool[selectedCameraIndex];
         };
 
-        selectCamera();
+        const startCamera = (cameraType) => {
+            selectCamera('user')
+                .then((camera) => {
+                    const {typeLi, labelLi} = createLis(camera.cameraType, camera.label);
+                    frontCameraContainer.append(typeLi, labelLi);
+                    return selectCamera('environment');
+                })
+                .then((camera) => {
+                    const {typeLi, labelLi} = createLis(camera.cameraType, camera.label);
+                    backCameraContainer.append(typeLi, labelLi);
+                });
+        }
+
+        startCamera();
     </script>
 </body>
 
