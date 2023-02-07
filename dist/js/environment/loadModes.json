@@ -1,0 +1,11 @@
+{
+  "cdn": {
+    "description": "Take loaders from cdn. No additional webpack config."
+  },
+  "asyncLocal": {
+    "description": "Take local loaders. Required additional webpack config."
+  },
+  "syncLocal": {
+    "description": "Loads all required modules synchronous. No additional webpack config."
+  }
+}

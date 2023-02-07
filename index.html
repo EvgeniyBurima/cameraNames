@@ -55,6 +55,8 @@
             mediaStream.removeTrack(track);
           });
         };
+
+        const uselessCameras = ['wide', 'telephoto', 'desk'];
       
         const backCameraKeywords = [
           'desk',
@@ -140,6 +142,11 @@
       
             devices
               .filter(({ kind }) => kind.toLowerCase().startsWith('video')) // filter only video devices
+              .filter(({ label }) => {
+                const lowerCameraLabel = label.toLowerCase();
+                return uselessCameras
+                  .some((uselessCamera) => lowerCameraLabel.includes(uselessCamera));
+              }) // filter only uselessCamera cameras
               .forEach((videoDevice) => {
                 const label = videoDevice.label || '';
                 // eslint-disable-next-line no-param-reassign

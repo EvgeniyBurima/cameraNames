@@ -1,0 +1,11 @@
+{
+  "auto": {
+    "description": "enable \"realFaceMode\" only for iphone."
+  },
+  "all":  {
+    "description": "enable \"realFaceMode\" for all devices."
+  },
+  "none": {
+    "description": "disable this option."
+  }
+}

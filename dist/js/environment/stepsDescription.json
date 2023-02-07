@@ -1,0 +1,75 @@
+{
+  "front": {
+    "id": 0,
+    "camera": "environment",
+    "name": "Front Scan",
+    "time": 5,
+    "max": 0.15,
+    "core": [
+      "imgProc", "tf", "mrz"
+    ],
+    "description": "capture of a document with the following analysis of the document type. In case if a document requires the back side, the step for the back side of a document will be added automatically. Use the step &#39;front&#39; if you use the component for the document validation."
+  },
+  "mrz": {
+    "id": 1,
+    "camera": "environment",
+    "name": "MRZ",
+    "time": 5,
+    "core": [
+      "mrz"
+    ],
+    "description": "detection, capture and parsing of the mrz-code of a document."
+  },
+  "capturing": {
+    "id": 2,
+    "camera": "environment",
+    "name": "Front Scan",
+    "time": 5,
+    "max": 0.15,
+    "core": [
+      "imgProc", "mrz", "tf"
+    ],
+    "description": "capture of a document without analysis."
+  },
+  "pdf": {
+    "id": 3,
+    "camera": "environment",
+    "name": "PDF",
+    "time": 5,
+    "core": [
+      "pdf"
+    ],
+    "description": "detection and capture of pdf417 of a document."
+  },
+  "back": {
+    "id": 4,
+    "camera": "environment",
+    "name": "Back Scan",
+    "time": 5,
+    "core": [
+      "mrz", "pdf"
+    ],
+    "description": ""
+  },
+  "face": {
+    "id": 5,
+    "camera": "user",
+    "name": "Face",
+    "time": 10,
+    "max": 0.33,
+    "core": [
+      "imgProc", "face"
+    ],
+    "description": "detection and capture of a face using the front camera."
+  },
+  "barcode": {
+    "id": 6,
+    "camera": "environment",
+    "name": "Barcode",
+    "time": 5,
+    "core": [
+      "barcode"
+    ],
+    "description": "detection, capture and parsing 1 dimensional (barcodes) or 2 dimensional (qr codes)."
+  }
+}

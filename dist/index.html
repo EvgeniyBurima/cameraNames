@@ -1,0 +1,84 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><!--[if lt IE 7 ]> <html lang="en" class="ie6" > <![endif]--><!--[if IE 7 ]>    <html lang="en" class="ie7" > <![endif]--><!--[if IE 8 ]>    <html lang="en" class="ie8" > <![endif]--><!--[if IE 9 ]>    <html lang="en" class="ie9" > <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html lang="en" class=""><!--<![endif]--><head><meta charset="utf-8"><title>Demo Pages</title><link href="css/idvc.css" rel="stylesheet"></head><body><style>body {
+    background: #eff3fc
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+  }</style><div class="container"><div id="videoCapturingEl"></div></div><button id="btn">Show Spinner</button> <button id="btn-reload">Reload component</button><script src="js/idvc.js"></script><script type="module">// 142 eyJwZGY0MTdrZXkiOiIyRXVvNmJ1ZGVYRTlaeDg5QUtKVXdTdVVwK2NNSlVNM1VDV3BNR0tQK0hNQnBKbFN6aU52cG9IUTNSQm1FejZhclNsQWhiQ25OaVFpcXdHVHFRVEVDcnBNS1duTGZpUlVqdTAvVlVXZ21VM2Z0RVhDWjNyTXgwUis5aXBJYXhqOHdQeWJUY05pWjdoUTMxaHZCa1VxaXplK1U1cWJXeXJIL2VJMVhHdGthSGc9IiwiaW1hZ2VQcm9jZXNzaW5nS2V5IjoiaWM1bUFMK2NOL3ZXaXQ4N295ZGdOVGN3NGtZTjJ3OHU3T3U4dzdaSjRFc2JYNUl6RGdRSXVmYkIzN1dqL0xVaFJoUjgvV3pnUHVRY3FQK2ZHR3crWmlzcUlIKzJJYlBBL2RhMjVVVm16WlhmRGVCN3lBUXBxOHRMb0JFNzdlSi94akZ1emsxRlNoWnhZTnNIa1ZsWXRNOTRyYXdJeUluVm1UYWNFMkxCcUxnPSIsInRyYWNrU3RyaW5nUGFyc2VyS2V5IjoiSmxtVFR0VjJxMEx0aE1aOWYvM1gwRGVvSHo4bnFIRkttYmdjN2EwcFo1Tlo3bE9Zc0VsbWlNMGppY3NOQWs3NDlWMU8wTVN3R0U0SEtOM2pkanpBYTBDQ0prZlQ2aXpMb1lvcnd5cmd0Y241d2FrdkM4SkdVd0dDdE1tb3cyc25VTHNpY1ZWYWVVS0JwWHdiZnlLM295R3ZBajBXNjVvTU5xK0V1bkxXNmQwPSIsImNvbW1vbkxpY2Vuc2VLZXkiOiIwNDhMUFA5L3NqeWNicFFIZnlNQ1dPQnNQMHVvWUoxblJJQmlNbDh2NFpwV0hIdE5OZVVuMVlJZ0dWdHRZNnk0M21yYXBLQzJjMWZYRG54UndLRi9UaEZ0Vi84aGFyMTZxOWEzbjE4WDlhdytyWGdiNno1Q3YzbUpnVkVvNmNEVWRveFRYTWhteS84WW1VVEFQUE91Rk5xbHZEcWFDeTRMS05XL1ZzNERhbTA9In0=
+    // wks-chl-26.idscan.loc eyJwZGY0MTdrZXkiOiIwTW5jR1hEOWdudENQdkpKb3B1VlJoUUh6ZFVtUkl2MEltWVdtcGl3MG5SRFNoclZlNWVMZW9ERnJjNXZzY0lnc0pZQUdwOE5ncUJtSjhLajBwRE9nRnJvYXJ3NkhGR1NkSlFEQTlEajVmV2JnU0p5ZW90bFFQVTExTXpUR3Y3VHVuWXN0RUNrVEN4dHJEWmxrd1FaYkdXc2VqQkl2Tkw5S2w1akJKd1c1UG89IiwiaW1hZ2VQcm9jZXNzaW5nS2V5IjoiZ1hldm1vcXZHNTg5VzcxSVNQaFpVdDRIRG1ObEpoVEFIYU1kaGxWbUZvSElxR2dhcVg0MTJqd0xmTHZGRXBLSnp2WXFoTkxCVUxOR3pyeEhKSlowZENxZVp6bmFYSTFUL0kyZ1orYWcrdStodFVLUlV6eUhlWkdEdE51azFxVitScTNlcmpmVlIrQUpta20vaFB1Yk94VHc2bVFzaER1NEVCaEtZUWd3RDlzPSIsInRyYWNrU3RyaW5nUGFyc2VyS2V5IjoiUkk5V1FsdUs4MndndzRkM2MzRzhOMWM3VHBnOHJZVFZKa3A5Tm0wbGdHeDBJMnJGNis2aGhROTVzMWF2UEsrbEljdE1odUJ4MSsvdlBiYU5Cb0dZQ0RIQVhielNsMmNCOXFCcnoyTEZqNFpQdXdHcDJOaTJXUnorMWs4WHA1blU3YjFkVXRGcytpOC9IS3NtaFhOcldoWHhCbE9pYkJUYWZjdDNDTStha21rPSIsImNvbW1vbkxpY2Vuc2VLZXkiOiJDSWZudWFpR3pBdjBIVjdsTlVRR3RiR09MaXhVb1N3akR5c0pSY0NVOG9CVzNRTUZudlRybElXMmIxZWdLcWpZaGxaazhGa09jV2JxL0ZYRXlWNVJ3akVjeUErTkhIV2MvazZiRGIxNThYWW5PV3FXbkR1QkFVSjQxN2pjOE1zK0JIZTRGUjJWekRKWldmY1JCWHFCRklIRnRtVi9WTXdBZEFCdzVPdHRGaHc9In0=
+    const config = {
+      el: 'videoCapturingEl',
+      licenseKey: 'eyJwZGY0MTdrZXkiOiIwTW5jR1hEOWdudENQdkpKb3B1VlJoUUh6ZFVtUkl2MEltWVdtcGl3MG5SRFNoclZlNWVMZW9ERnJjNXZzY0lnc0pZQUdwOE5ncUJtSjhLajBwRE9nRnJvYXJ3NkhGR1NkSlFEQTlEajVmV2JnU0p5ZW90bFFQVTExTXpUR3Y3VHVuWXN0RUNrVEN4dHJEWmxrd1FaYkdXc2VqQkl2Tkw5S2w1akJKd1c1UG89IiwiaW1hZ2VQcm9jZXNzaW5nS2V5IjoiZ1hldm1vcXZHNTg5VzcxSVNQaFpVdDRIRG1ObEpoVEFIYU1kaGxWbUZvSElxR2dhcVg0MTJqd0xmTHZGRXBLSnp2WXFoTkxCVUxOR3pyeEhKSlowZENxZVp6bmFYSTFUL0kyZ1orYWcrdStodFVLUlV6eUhlWkdEdE51azFxVitScTNlcmpmVlIrQUpta20vaFB1Yk94VHc2bVFzaER1NEVCaEtZUWd3RDlzPSIsInRyYWNrU3RyaW5nUGFyc2VyS2V5IjoiUkk5V1FsdUs4MndndzRkM2MzRzhOMWM3VHBnOHJZVFZKa3A5Tm0wbGdHeDBJMnJGNis2aGhROTVzMWF2UEsrbEljdE1odUJ4MSsvdlBiYU5Cb0dZQ0RIQVhielNsMmNCOXFCcnoyTEZqNFpQdXdHcDJOaTJXUnorMWs4WHA1blU3YjFkVXRGcytpOC9IS3NtaFhOcldoWHhCbE9pYkJUYWZjdDNDTStha21rPSIsImNvbW1vbkxpY2Vuc2VLZXkiOiJDSWZudWFpR3pBdjBIVjdsTlVRR3RiR09MaXhVb1N3akR5c0pSY0NVOG9CVzNRTUZudlRybElXMmIxZWdLcWpZaGxaazhGa09jV2JxL0ZYRXlWNVJ3akVjeUErTkhIV2MvazZiRGIxNThYWW5PV3FXbkR1QkFVSjQxN2pjOE1zK0JIZTRGUjJWekRKWldmY1JCWHFCRklIRnRtVi9WTXdBZEFCdzVPdHRGaHc9In0=',
+      // licenseKey: 'eyJwZGY0MTdrZXkiOiIyRXVvNmJ1ZGVYRTlaeDg5QUtKVXdTdVVwK2NNSlVNM1VDV3BNR0tQK0hNQnBKbFN6aU52cG9IUTNSQm1FejZhclNsQWhiQ25OaVFpcXdHVHFRVEVDcnBNS1duTGZpUlVqdTAvVlVXZ21VM2Z0RVhDWjNyTXgwUis5aXBJYXhqOHdQeWJUY05pWjdoUTMxaHZCa1VxaXplK1U1cWJXeXJIL2VJMVhHdGthSGc9IiwiaW1hZ2VQcm9jZXNzaW5nS2V5IjoiaWM1bUFMK2NOL3ZXaXQ4N295ZGdOVGN3NGtZTjJ3OHU3T3U4dzdaSjRFc2JYNUl6RGdRSXVmYkIzN1dqL0xVaFJoUjgvV3pnUHVRY3FQK2ZHR3crWmlzcUlIKzJJYlBBL2RhMjVVVm16WlhmRGVCN3lBUXBxOHRMb0JFNzdlSi94akZ1emsxRlNoWnhZTnNIa1ZsWXRNOTRyYXdJeUluVm1UYWNFMkxCcUxnPSIsInRyYWNrU3RyaW5nUGFyc2VyS2V5IjoiSmxtVFR0VjJxMEx0aE1aOWYvM1gwRGVvSHo4bnFIRkttYmdjN2EwcFo1Tlo3bE9Zc0VsbWlNMGppY3NOQWs3NDlWMU8wTVN3R0U0SEtOM2pkanpBYTBDQ0prZlQ2aXpMb1lvcnd5cmd0Y241d2FrdkM4SkdVd0dDdE1tb3cyc25VTHNpY1ZWYWVVS0JwWHdiZnlLM295R3ZBajBXNjVvTU5xK0V1bkxXNmQwPSIsImNvbW1vbkxpY2Vuc2VLZXkiOiIwNDhMUFA5L3NqeWNicFFIZnlNQ1dPQnNQMHVvWUoxblJJQmlNbDh2NFpwV0hIdE5OZVVuMVlJZ0dWdHRZNnk0M21yYXBLQzJjMWZYRG54UndLRi9UaEZ0Vi84aGFyMTZxOWEzbjE4WDlhdytyWGdiNno1Q3YzbUpnVkVvNmNEVWRveFRYTWhteS84WW1VVEFQUE91Rk5xbHZEcWFDeTRMS05XL1ZzNERhbTA9In0=',
+      // tapBackSide: true,
+      // tapFace: true,
+      parseMRZ: true,
+      tapOnVideo: true,
+      autoContinue: true,
+      // fixFrontOrientAfterUpload: true,
+      enableLimitation: false,
+      enableMobileLimitation: false,
+      // showForceCapturingBtn: false,
+      // enableFlash: false,
+      isShowManualSwitchButton: {mobile: true, desktop: true},
+      parsePDF: true,
+      priority: 'camera', // camera, auto, uploader
+      // displayParsedData: true,
+      realFaceMode: 'all', // all, none, auto
+      useCDN: false,
+      isSubmitMetaData: true,
+      strictAllowedTypes: false,
+      showSubmitBtn: true,
+      // disableFaceStepFileUpload: true,
+      types: [
+        "ID",
+        "Passport",
+        // "PassportCard",
+        "GreenCard",
+        "InternationalId",
+      ],
+      resizeUploadedImage: 2000,
+      steps: [
+        { type: 'front', name: 'Front' },
+        { type: 'face', name: 'Selfie' },
+        // { type: 'pdf', name: 'pdf' },
+        // { type: 'mrz', name: 'MRZ' },
+        // { type: 'capturing', name: 'capturing' },
+        // { type: 'back', name: 'back' },
+        // { type: 'barcode', name: 'barcode' },
+      ],
+      clickGuidlines () {
+        console.log('clickGuidlines')
+      },
+      onChange (data) {
+        console.log('change')
+        console.log(data)
+      },
+      onReset (data) {
+        console.log('reset')
+        // console.log(data)
+      },
+      onCameraError (data) {
+        console.log('CAMERA_ERR', JSON.stringify(data))
+      },
+      submit (data) {
+        console.log(data)
+      },
+      onRetakeHook(data) {
+        console.log('retake');
+        // console.log(data);
+      },
+      onMounted() {
+        console.log('onMounted');
+      },
+    };
+    const videoCapturingComponent = new IDVC.default(config);
+    let k = false
+    document.getElementById('btn').addEventListener('click', () => {
+        k = !k
+        videoCapturingComponent.showSpinner(k)
+    })
+    document.getElementById('btn-reload').addEventListener('click', () => {
+      // config.enableLimitation = !config.enableLimitation;
+      videoCapturingComponent.reloadComponent(config);
+    })</script></body></head></html>

@@ -1,0 +1,184 @@
+{
+  "--btn-border-radius-big": {
+    "default": 4,
+    "type": "Number",
+    "description": [
+      "radius of retake, continue, submit buttons"
+    ]
+  },
+  "--btn-border-radius-small": {
+    "default": 4,
+    "type": "Number",
+    "description": [
+      "radius of the manual switch button",
+      "radius of the messagebox"
+    ]
+  },
+  "--color-text-secondary-light": {
+    "default": "#C4C4C4",
+    "type": "Color",
+    "description": [
+      "'select document type' menus's checkmark"
+    ]
+  },
+  "--color-positive-light": {
+    "default": "#17EA4C",
+    "type": "Color",
+    "description": [
+      "success frame on capturing"
+    ]
+  },
+  "--border-color-divider": {
+    "default": "#C0C0C0",
+    "type": "Color",
+    "description": [
+      "message box's default border color",
+      "'select document type' menus's devider"
+    ]
+  },
+  "--color-primary-light-2": {
+    "default": "#DCE7FD",
+    "type": "Color",
+    "description": [
+      "primary button hover, focus colors"
+    ]
+  },
+  "--color-primary-light-7": {
+    "default": "#85AAF7",
+    "type": "Color",
+    "description": [
+      "transparent button hover and focus background color"
+    ]
+  },
+  "--color-primary-light-9": {
+    "default": "#6291F4",
+    "type": "Color",
+    "description": [
+      "transparent button border hover, focus colors",
+      "'select document type' menus's selected item background"
+    ]
+  },
+  "--color-primary-dark-2": {
+    "default": "#080D18",
+    "type": "Color",
+    "description": [
+      "primary button active colors",
+      "transparent button active font color and border color"
+    ]
+  },
+  "--color-background-subheader": {
+    "default": "#F5F6F9",
+    "type": "Color",
+    "description": [
+      "background of the bottom part of the active step in 'steps' section",
+      "'type not defined' select background of the modal window",
+      "scrollbar of 'result' modal window"
+    ]
+  },
+  "--color-background-white": {
+    "default": "#FFF",
+    "type": "Color",
+    "description": [
+      "uploader's background",
+      "background of 'result' modal window container",
+      "background of 'type not defined' modal window",
+      "background of 'document type-hint’ section"
+    ]
+  },
+  "--border-color-base": {
+    "default": "#DCDFE6",
+    "type": "Color",
+    "description": [
+      "border of 'type not defined' modal window select",
+      "border of 'document type-hint' section",
+      "borders of top part in 'steps' section",
+      "bottom icons of inactive step in 'steps' section",
+      "image background  in 'steps' section"
+    ]
+  },
+  "--color-primary": {
+    "default": "#5185F3",
+    "type": "Color",
+    "description": [
+      "background of primary buttons",
+      "active step name, icon, and bottom line of the active step in 'steps' section",
+      "uploader labels, border",
+      "manual take picture button in video capturing",
+      "change the document type in 'document type-hint' section",
+      "step name on hover in 'steps' section",
+      "guideline inscription",
+      "background of the upload icon in the uploader",
+      "uploader's emphasized descriptions",
+      "disabled primary buttons",
+      "disabled button border",
+      "spinner's color"
+    ]
+  },
+  "--color-success": {
+    "default": "#13CE66",
+    "type": "Color",
+    "description": [
+      "succeeded steps in 'steps' section",
+      "face shape when capturing the video in face step",
+      "capture progress",
+      "valid sign of 'result' modal window container",
+      "hints on video capture",
+      "background of uploader's success sign"
+    ]
+  },
+  "--color-danger": {
+    "default": "#FF4949",
+    "type": "Color",
+    "description": [
+      "background and bottom border of the step error in 'steps' section",
+      "header of 'type not defined' modal window",
+      "invalid sign of 'result' modal window container",
+      "license error text"
+    ]
+  },
+  "--color-warning": {
+    "default": "#FFC632",
+    "type": "Color",
+    "description": [
+      "warning sign of uploader"
+    ]
+  },
+  "--color-text-secondary": {
+    "default": "#909399",
+    "type": "Color",
+    "description": [
+      "scrollbar of 'result' modal window",
+      "library version",
+      "descriptions of the uploader",
+      "close sign of 'result' modal window",
+      "name of the inactive step in 'steps' section"
+    ]
+  },
+  "--color-black": {
+    "default": "#000",
+    "type": "Color",
+    "description": [
+      "face shape icon in video capturing when the face is not detected at the face step",
+      "shadow of 'type not defined' modal window",
+      "caption of 'type not defined' modal window select",
+      "uploader's bold descriptions",
+      "shadow of 'result' modal window",
+      "bottom border of 'result' modal window row",
+      "options of change the document type in 'document type-hint' section",
+      "uploader's error sign stroke",
+      "uploader's error description"
+    ]
+  },
+  "--color-white": {
+    "default": "#FFF",
+    "type": "Color",
+    "description": [
+      "caption of buttons",
+      "border and caption of manual take picture button",
+      "upload icon",
+      "header description of 'type not defined' modal window",
+      "uploader success sign's checkmark",
+      "description of capture progress"
+    ]
+  }
+}

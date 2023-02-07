@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Names</title>
+    <link rel="stylesheet" href="./dist/css/idvc.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            background-color: antiquewhite;
+        }
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="videoCapturingEl"></div>
+    </div>
+
+    <script src="./dist/js/idvc.js"></script>
+
+    <script>
+      const config = {
+        el: 'videoCapturingEl',
+        licenseKey: 'eyJwZGY0MTdrZXkiOiIwTW5jR1hEOWdudENQdkpKb3B1VlJoUUh6ZFVtUkl2MEltWVdtcGl3MG5SRFNoclZlNWVMZW9ERnJjNXZzY0lnc0pZQUdwOE5ncUJtSjhLajBwRE9nRnJvYXJ3NkhGR1NkSlFEQTlEajVmV2JnU0p5ZW90bFFQVTExTXpUR3Y3VHVuWXN0RUNrVEN4dHJEWmxrd1FaYkdXc2VqQkl2Tkw5S2w1akJKd1c1UG89IiwiaW1hZ2VQcm9jZXNzaW5nS2V5IjoiZ1hldm1vcXZHNTg5VzcxSVNQaFpVdDRIRG1ObEpoVEFIYU1kaGxWbUZvSElxR2dhcVg0MTJqd0xmTHZGRXBLSnp2WXFoTkxCVUxOR3pyeEhKSlowZENxZVp6bmFYSTFUL0kyZ1orYWcrdStodFVLUlV6eUhlWkdEdE51azFxVitScTNlcmpmVlIrQUpta20vaFB1Yk94VHc2bVFzaER1NEVCaEtZUWd3RDlzPSIsInRyYWNrU3RyaW5nUGFyc2VyS2V5IjoiUkk5V1FsdUs4MndndzRkM2MzRzhOMWM3VHBnOHJZVFZKa3A5Tm0wbGdHeDBJMnJGNis2aGhROTVzMWF2UEsrbEljdE1odUJ4MSsvdlBiYU5Cb0dZQ0RIQVhielNsMmNCOXFCcnoyTEZqNFpQdXdHcDJOaTJXUnorMWs4WHA1blU3YjFkVXRGcytpOC9IS3NtaFhOcldoWHhCbE9pYkJUYWZjdDNDTStha21rPSIsImNvbW1vbkxpY2Vuc2VLZXkiOiJDSWZudWFpR3pBdjBIVjdsTlVRR3RiR09MaXhVb1N3akR5c0pSY0NVOG9CVzNRTUZudlRybElXMmIxZWdLcWpZaGxaazhGa09jV2JxL0ZYRXlWNVJ3akVjeUErTkhIV2MvazZiRGIxNThYWW5PV3FXbkR1QkFVSjQxN2pjOE1zK0JIZTRGUjJWekRKWldmY1JCWHFCRklIRnRtVi9WTXdBZEFCdzVPdHRGaHc9In0=',
+        tapBackSide: false,
+        tapFace: false,
+        parseMRZ: true,
+        tapOnVideo: false,
+        autoContinue: true,
+        networkUrl: 'dist/networks',
+        // fixFrontOrientAfterUpload: true,
+        enableLimitation: false,
+        enableMobileLimitation: false,
+        // showForceCapturingBtn: false,
+        // enableFlash: false,
+        isShowManualSwitchButton: {mobile: true, desktop: true},
+        parsePDF: true,
+        priority: 'camera', // camera, auto, uploader
+        // displayParsedData: true,
+        realFaceMode: 'all', // all, none, auto
+        useCDN: false,
+        isSubmitMetaData: false,
+        strictAllowedTypes: false,
+        showSubmitBtn: true,
+        // disableFaceStepFileUpload: true,
+        types: [
+          "ID",
+          "Passport",
+          // "PassportCard",
+          "GreenCard",
+          "InternationalId",
+        ],
+        resizeUploadedImage: 2000,
+        steps: [
+          { type: 'front', name: 'Front' },
+          { type: 'face', name: 'Selfie' },
+          // { type: 'pdf', name: 'pdf' },
+          // { type: 'mrz', name: 'MRZ' },
+          // { type: 'capturing', name: 'capturing' },
+          // { type: 'back', name: 'back' },
+          // { type: 'barcode', name: 'barcode' },
+        ],
+        clickGuidlines () {
+          console.log('clickGuidlines')
+        },
+        onChange (data) {
+          console.log('change')
+          console.log(data)
+        },
+        onReset (data) {
+          console.log('reset')
+          // console.log(data)
+        },
+        onCameraError (data) {
+          console.log('CAMERA_ERR', JSON.stringify(data))
+        },
+        submit (data) {
+          console.log(data)
+        },
+        onRetakeHook(data) {
+          console.log('retake');
+          // console.log(data);
+        },
+        onMounted() {
+          console.log('onMounted');
+        },
+      };
+      const videoCapturingComponent = new IDVC.default(config);
+    </script>
+</body>
+
+</html>

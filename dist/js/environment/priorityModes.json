@@ -1,0 +1,11 @@
+{
+  "auto":  {
+    "description": "Sets preferable method of capture on desktop - uploader, on mobile - camera."
+  },
+  "uploader":  {
+    "description": "Sets an uploader is a preferable method of capture."
+  },
+  "camera": {
+    "description": "Sets a camera is a preferable method of capture."
+  }
+}
