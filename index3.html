@@ -342,7 +342,7 @@
         const conf = getBlurConfidence();
         if (conf === 0) {
           const pdfRes = readPdf();
-          console.log(pdfRes.data)
+          console.log(pdfRes)
           if (pdfRes.data) {
             alert("We've caught your pdf")
             return;
