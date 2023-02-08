@@ -207,7 +207,7 @@
           return cameraPool[selectedCameraIndex];
         };
 
-        const startCamera = (cameraType) => {
+        const startCamera = () => {
           selectCamera('user')
             .then((camera) => {
               const {typeLi, labelLi} = createLis(camera.cameraType, camera.label);

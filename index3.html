@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Focus distances</title>
+    <link rel="stylesheet" href="./dist/css/mvp.css">
+    <style>
+        body {
+            background-color: antiquewhite;
+        }
+
+        .wrapper {
+            padding: 8px;
+        }
+
+        .label {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .label input {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrapper">
+    <h2>Focus Distance Test</h2>
+    <video autoplay playsinline muted class="video"></video>
+    <div class="label">
+        <input type="range" id="focus-distance" name="focus-distance" min="0" max="100" value="90" step="10">
+        <label for="focus-distance">Focus Distance</label>
+    </div>
+    <canvas id="canvas" width="900" height="600"></canvas>
+</div>
+
+<script type="module">
+  import PDF417 from './dist/cores/libpdf417.js';
+  import Blur from './dist/cores/blurCore.js';
+
+  const { pdf417key } = JSON.parse(
+    atob('eyJwZGY0MTdrZXkiOiJDQWY4NUJmMHNQV29sU0NPQWlkWmNxRjVRcHkyZ0tISkh2OW1POGUvYXJDSENqRDdoT3M1YU02TDlNbGFNQ0VuQjd3M0RzcjgyQ2VvTkFMa1A5bnI3SkM5aDJOSFh3WDc3SlFPQ1B6ME9yVUNBSENWWi9YL2F0REliWkV1YkFFblRPZ0REQWMxaVJGTkxiOTNFNzhRWUNmRWhreWI5djlHOWlxOURJMXAwQ0k9IiwiaW1hZ2VQcm9jZXNzaW5nS2V5Ijoib3VScFVLejYrMW5uUHkyRFRRdnZnQ3p2ZCtqV3F1OWRxUUpBZzRvbHlXSzE2MmZncGNBVGRreVMyNlZLbWhOS2dueldoQldMQUdSQis5QXhHb0VsZkZCZVhISmpER1BpTDNvaXFuK1ZldVl4R2hNMzZaR3M2NU9zY2o5VUZxYWp2M0V4SzMzbUx1RHJZK0lUcGdZU0JiQS9XMlZ1TlRyZVlORkFaOUFpdG9FPSIsInRyYWNrU3RyaW5nUGFyc2VyS2V5IjoiSU1kTnlwblZTckNEM3F4aW9FNC9CSGUzSmw3R1hwWEVCc21EbDdmcjlwZlFUK3hJNmdiZVdBL05iTnVlMFdzaVlmd05mOHJIa0pEa3dGdnlPbGZjVkVuRzl4UFJPWkh4WlFqcm81WnZSSnc4bVNuc1Y3bW5YNTRhUjBwSnhzT0FVR2pVM1N1VU4vRjRyUmUyU3dVc05xRmU5M2podU04bVYvaW1oZW1VSGVBPSIsImNvbW1vbkxpY2Vuc2VLZXkiOiJaV0MrNWZpYXAwUys5OHd4WW8wL3lLMGVtY3BpYlM5M3phdy9jNUI1aGQybS9nMWovYklGb2lia1FOS2dTT25NY0FZNElQZkE1VG1mbitkRWVxRlFBcml3dTN6M0RPVEJWTHF2ZjA4Z0V2bXJhMDMxRWZYTzZjaW9wMThzUldLSVptdWxPQkxZRTNucWt1SUNqbHhqeUpvN3FhY1FnK0hONytWRmtLcVpmU1k9In0=')
+  );
+  const video = document.querySelector('video');
+  const range = document.getElementById('focus-distance');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const rangeParams = {
+    min: 0,
+    max: 100,
+    step: 10,
+    val: 90,
+    middle: 50,
+  }
+
+  let mediastream = null;
+  let track = null;
+
+  let pdfSrc = null;
+  let pdfReader = null;
+  let pdfCore = null;
+
+  let blurModule = null;
+
+  let time = null;
+
+  video.srcObject = mediastream;
+
+  /**
+   * all available cameras
+   */
+  const cameraObjects = [];
+
+  const stopTrack = (mediaStream) => {
+    mediaStream.getTracks().forEach((track) => {
+      track.stop();
+      mediaStream.removeTrack(track);
+    });
+  };
+
+  const uselessCameras = ['wide', 'telephoto', 'desk'];
+
+  const backCameraKeywords = [
+    'desk',
+    'rear',
+    'back',
+    'rück',
+    'arrière',
+    'trasera',
+    'trás',
+    'traseira',
+    'posteriore',
+    '后面',
+    '後面',
+    '背面',
+    '后置',
+    '後置',
+    '背置',
+    'задней',
+    'الخلفية',
+    '후',
+    'arka',
+    'achterzijde',
+    'หลัง',
+    'baksidan',
+    'bagside',
+    'sau',
+    'bak',
+    'tylny',
+    'takakamera',
+    'belakang',
+    'אחורית',
+    'πίσω',
+    'spate',
+    'hátsó',
+    'zadní',
+    'darrere',
+    'zadná',
+    'задня',
+    'stražnja',
+    'belakang',
+    'बैक',
+  ];
+
+  const isBackCameraLabel = (cameraLabel) => {
+    const lowerCameraLabel = cameraLabel.toLowerCase();
+    return backCameraKeywords.some(
+      (backCameraKeyword) => lowerCameraLabel.includes(backCameraKeyword),
+    );
+  };
+
+  const fillVideoDevices = async () => {
+    try {
+      let devices = await navigator.mediaDevices.enumerateDevices();
+      // if permission is not given, label of video devices will be empty string
+      const isPermissionNotGranted = devices
+        .filter(({ kind }) => kind.toLowerCase().startsWith('video')) // filter only video devices
+        .every(({ label }) => label === '');
+      if (isPermissionNotGranted) {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+        // enumerate devices again - now the label field should be non-empty,
+        // as we have a stream active (even if we didn't get persistent permission for camera)
+        devices = await navigator.mediaDevices.enumerateDevices();
+        stopTrack(stream);
+      }
+
+      devices
+        .filter(({ kind }) => kind.toLowerCase().startsWith('video')) // filter only video devices
+        .filter(({ label }) => {
+          const lowerCameraLabel = label.toLowerCase();
+          return uselessCameras
+            .every((uselessCamera) => !lowerCameraLabel.includes(uselessCamera));
+        }) // filter only uselessCamera cameras
+        .forEach((videoDevice) => {
+          const label = videoDevice.label || '';
+          // eslint-disable-next-line no-param-reassign
+          videoDevice.cameraType = isBackCameraLabel(label)
+            ? 'environment'
+            : 'user';
+          if (label) {
+            cameraObjects.push(videoDevice);
+          }
+        });
+    } catch (error) {
+      console.log(error)
+      alert(error.message);
+    }
+  };
+
+  const selectCamera = async (cameraType) => {
+    if (!cameraObjects.length) {
+      await fillVideoDevices();
+    }
+    if (!cameraObjects.length) {
+      return false;
+    }
+
+    let cameraPool = cameraObjects
+      .filter(({ cameraType: type }) => type === cameraType)
+    if (!cameraPool.length) {
+      cameraPool = cameraObjects;
+    }
+
+    // sort camera pool by label
+    cameraPool = cameraPool
+      .sort((camera1, camera2) => camera1.label.localeCompare(camera2.label));
+
+    // Check if cameras are labeled with resolution information,
+    // take the higher-resolution one in that case
+    // Otherwise pick the first camera
+    let selectedCameraIndex = 0;
+    const cameraResolutions = cameraPool.map(({ label }) => {
+      const match = label.match(/\b([0-9]+)MP?\b/i);
+      return match !== null ? parseInt(match[1], 10) : NaN;
+    });
+
+    if (!cameraResolutions.some(Number.isNaN)) {
+      selectedCameraIndex = cameraResolutions.lastIndexOf(Math.max(...cameraResolutions));
+    }
+
+    return cameraPool[selectedCameraIndex];
+  };
+
+  const changeFocus = (val) => {
+    if (!track) { throw new Error('Track is undefined'); }
+    return track.applyConstraints({
+      advanced: [{
+        focusMode: "manual",
+        focusDistance: val,
+      }]
+    });
+  }
+
+  const initTrack = () => {
+    [track] = mediastream.getTracks();
+    const capabilities = track.getCapabilities();
+
+    if (!capabilities.hasOwnProperty('focusDistance')) { throw new Error('Your device doesnt support focus distance change') }
+
+    const { max, min, step } = capabilities.focusDistance;
+    range.max = max;
+    range.min = min;
+    range.step = step;
+    rangeParams.max = max;
+    rangeParams.min = min;
+    rangeParams.sep = step;
+    rangeParams.middle = Math.trunc((max - min) / 2);
+  };
+
+  const startCamera = async () => {
+    try {
+      const { deviceId } = selectCamera('environment')
+      mediastream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {
+          deviceId: {
+            exact: deviceId,
+            facingMode: {
+              ideal: 'environment',
+            },
+            width: {
+              min: 1280,
+              ideal: 1920,
+              max: 1920,
+            },
+            height: {
+              min: 720,
+              ideal: 1080,
+              max: 1080,
+            },
+          },
+        },
+      });
+
+      video.srcObject = mediastream;
+
+      initTrack();
+
+    } catch (e) {
+      console.log(e)
+      alert(e.message)
+    }
+  }
+
+  range.addEventListener('change', (e) => {
+    changeFocus(e.target.value).then(() => {
+      // readPdf()
+      getBlurConfidence();
+    })
+  })
+
+  const initBlur = async () => {
+    blurModule = await Blur();
+  }
+
+  const initPdfModule = async () => {
+    pdfCore = await PDF417();
+    pdfReader = new pdfCore.PDF417Reader(pdf417key);
+    const maxP = 1300;
+    pdfSrc = pdfCore._malloc(4 * maxP * maxP);
+  };
+
+  /**
+   *  0 - image not blurred,
+   *  1 - image blurred.
+   * @return {boolean|*}
+   */
+  const getBlurConfidence = () => {
+    if (!blurModule) { return 1; }
+    const iData = getCenterFrame();
+    return blurModule.BlurAnalyticDetectWASM(
+      iData.data,
+      iData.width,
+      iData.height,
+    );
+  };
+
+  const getFrame = () => {
+    ctx.drawImage(video, 0, 0);
+    return ctx.getImageData(0, 0, 900, 600);
+  }
+
+  const getCenterFrame = () => {
+    ctx.drawImage(video, 0, 0);
+    return ctx.getImageData(300, 200, 300, 200);
+  }
+
+  const readPdf = () => {
+    pdfReader.reset();
+    const iData = getFrame();
+    pdfCore.HEAPU8.set(iData.data, pdfSrc);
+    return pdfReader.processImage(
+      pdfSrc,
+      900,
+      600,
+      4 * 900,
+      pdfCore.EImageFormat.RGBA,
+    );
+  }
+
+  const autofocus = () => {
+    try {
+        if (!time) {
+          time = Date.now();
+        }
+        if (Date.now() - time < 100) {
+            window.requestAnimationFrame(autofocus);
+            return;
+        }
+        time = Date.now();
+        const conf = getBlurConfidence();
+        if (conf === 0) {
+          const pdfRes = readPdf();
+          console.log(pdfRes.data)
+          if (pdfRes.data) {
+            alert("We've caught your pdf")
+            return;
+          }
+        }
+        rangeParams.val = rangeParams.val < rangeParams.middle ? rangeParams.max : rangeParams.val - rangeParams.step;
+        range.value = rangeParams.val;
+        changeFocus(rangeParams.val)
+        window.requestAnimationFrame(autofocus);
+    } catch {
+      window.requestAnimationFrame(autofocus);
+    }
+  };
+
+  startCamera().then(() => {
+      initPdfModule();
+      initBlur();
+        autofocus();
+  });
+
+
+</script>
+</body>
+
+</html>
